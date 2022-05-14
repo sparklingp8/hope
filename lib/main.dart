@@ -20,7 +20,7 @@ class mainScreen extends StatelessWidget {
         title: const Text("Hope"),
       ),
   body: Container(
-    child: Text("hi"),
+    child: Text("hi hope"),
   ),
     );
   }
