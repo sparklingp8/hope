@@ -17,10 +17,11 @@ class mainScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Hope"),
+        title: const Text("Hope yes"),
+        elevation: 0,
       ),
   body: Container(
-    child: Text("hi"),
+    child: Text("hi hope"),
   ),
     );
   }
