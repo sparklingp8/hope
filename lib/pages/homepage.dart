@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hope/drawer.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({Key? key}) : super(key: key);
@@ -9,8 +11,21 @@ class MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  var name = "Change my name";
-  TextEditingController _cn1 = TextEditingController();
+  var url = "https://jsonplaceholder.typicode.com/photos";
+  var data;
+  @override
+  void initState() {
+
+    super.initState();
+    fetchdata();
+  }
+
+  fetchdata() async {
+    var res = await http.get(Uri.parse(url));
+    data = jsonDecode(res.body);
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,42 +35,17 @@ class _MainScreenState extends State<MainScreen> {
         elevation: 0,
       ),
       drawer: Drawer1(),
-      body: Center(
-        child: SingleChildScrollView(
-          child: Card(
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 50,
-                ),
-                Image.asset(
-                  "assets/code.jpeg",
-                  fit: BoxFit.cover,
-                ),
-                SizedBox(
-                  height: 50,
-                ),
-                Text(
-                  "${name}",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: TextField(
-                    controller: _cn1,
-                    decoration: InputDecoration(
-                        border: OutlineInputBorder(), label: Text("Name")),
-                  ),
-                )
-              ],
-            ),
-          ),
-        ),
-      ),
+      body: data == null
+          ? Center(child: CircularProgressIndicator())
+          : ListView.builder(itemBuilder: (context,index){
+            return ListTile(
+              title: Text(data[index]["title"]),
+              subtitle: Text("ID${data[index]["id"]}"),
+              leading: Image.network(data[index]["url"]),
+            );
+      }),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          name = _cn1.text;
-          print(name);
           setState(() {});
         },
         child: const Icon(Icons.send),
